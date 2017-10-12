@@ -142,7 +142,7 @@ def arbitraje(btc=1, eth=1):
                     #data['min_ask'] = Money(data['max_bid'], 'CLP')
                     #data['last_price'] = Money(data['max_bid'], 'CLP')
 
-            with open(currencies_path + 'eth_clp_cryptomkt.json') as data_file:
+             with open(currencies_path + 'eth_clp_cryptomkt.json') as data_file:
                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
                    data = json.load(data_file)
                    cryptomkt_eth_max_bid =  float(data['max_bid'])
