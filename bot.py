@@ -126,6 +126,9 @@ def arbitraje(btc=1, eth=1):
              surbtc_eth_max_bid = ""
              surbtc_eth_min_ask = ""
              surbtc_eth_last_price = ""
+             cryptomkt_eth_max_bid = ""
+             cryptomkt_eth_min_ask = ""
+             cryptomkt_eth_last_price = ""
              bitstamp_eth_max_bid = ""
              bitstamp_eth_min_ask = ""
              bitstamp_eth_last_price = ""
@@ -138,6 +141,15 @@ def arbitraje(btc=1, eth=1):
                     surbtc_eth_last_price = float(data['last_price'])
                     #data['min_ask'] = Money(data['max_bid'], 'CLP')
                     #data['last_price'] = Money(data['max_bid'], 'CLP')
+
+            with open(currencies_path + 'eth_clp.json') as data_file:
+                   # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
+                   data = json.load(data_file)
+                   cryptomkt_eth_max_bid =  float(data['max_bid'])
+                   cryptomkt_eth_min_ask =  float(data['min_ask'])
+                   cryptomkt_eth_last_price = float(data['last_price'])
+                   #data['min_ask'] = Money(data['max_bid'], 'CLP')
+                   #data['last_price'] = Money(data['max_bid'], 'CLP')
 
              with open(currencies_path + 'bitstamp_eth_usd.json') as data_file:
                     data = json.load(data_file)
@@ -153,10 +165,24 @@ def arbitraje(btc=1, eth=1):
                     out += '\n' + "  - Al comprar %s ETH en SurBTC a %s, podria venderse en BitStamp a %s y ganar %s" % (eth, mineth, maxeth, margin)
              if bitstamp_eth_last_price*usd_clp_rate < surbtc_eth_last_price:
 #                    print "Existe una oportunidad de comprar eth barato en Bitstamp y venderlo mas caro en SurBTC"
-                    maxeth = format_currency(int(surbtc_eth_last_price*eth), 'CLP', locale='es_CL')
+                    maxeth = format_currency(int(cryptomkt_eth_last_price*eth), 'CLP', locale='es_CL')
                     mineth = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
-                    margin = format_currency(int(surbtc_eth_last_price*eth-bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
+                    margin = format_currency(int(cryptomkt_eth_last_price*eth-bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
                     out += '\n' + "  - Al comprar %s ETH en Bitstamp a %s, podria venderse en SurBTC a %s y ganar %s" % (eth, mineth, maxeth, margin)
+            if bitstamp_eth_last_price*usd_clp_rate > cryptomkt_eth_last_price:
+            #                    print "Existe una oportunidad de comprar eth barato en SurBTC y venderlo mas caro en Bitstamp"
+                   maxeth = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
+                   mineth = format_currency(int(surbtc_eth_last_price*eth), 'CLP', locale='es_CL')
+                   margin = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate)-int(surbtc_eth_last_price*eth), 'CLP', locale='es_CL')
+                   out += '\n' + "  - Al comprar %s ETH en Crytomkt a %s, podria venderse en BitStamp a %s y ganar %s" % (eth, mineth, maxeth, margin)
+            if bitstamp_eth_last_price*usd_clp_rate < cryptomkt_eth_last_price:
+            #                    print "Existe una oportunidad de comprar eth barato en Bitstamp y venderlo mas caro en SurBTC"
+                   maxeth = format_currency(int(cryptomkt_eth_last_price*eth), 'CLP', locale='es_CL')
+                   mineth = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
+                   margin = format_currency(int(cryptomkt_eth_last_price*eth-bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
+                   out += '\n' + "  - Al comprar %s ETH en Bitstamp a %s, podria venderse en Crytomkt a %s y ganar %s" % (eth, mineth, maxeth, margin)
+
+
              out += '\n\n' + "Tasa de cambio: 1 USD = %s CLP (Yahoo Finance)" % (usd_clp_rate)
              out += '\n' + 'WIP: Incluir costos de transacciones en calculo'
              #print out
