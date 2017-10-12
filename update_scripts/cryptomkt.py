@@ -12,17 +12,11 @@ eth_clp = {}
 response = urllib.urlopen(url_eth)
 data = json.loads(response.read())
 
-<<<<<<< Updated upstream
-eth_clp['last_price'] = int(round(float(data['ticker']['last_price'][0]),0))
-eth_clp['min_ask'] = int(round(float(data['ticker']['ask'][0]),0))
-eth_clp['max_bid']  = int(round(float(data['ticker']['bid'][0]),0))
-=======
 eth_clp['market_name'] = 'Cryptomkt'
 eth_clp['currencies'] = 'ETH-CLP'
 eth_clp['last_price'] = int(round(float(data['data'][0]['last_price']),0))
 eth_clp['min_ask'] = int(round(float(data['data'][0]['ask']),0))
 eth_clp['max_bid']  = int(round(float(data['data'][0]['bid']),0))
->>>>>>> Stashed changes
 eth_clp['timestamp'] = str(datetime.datetime.now()).split('.')[0]
 
 with open(currencies_path + 'eth_clp_cryptomkt.json', 'w') as outfile:
