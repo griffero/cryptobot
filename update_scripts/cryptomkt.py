@@ -14,9 +14,9 @@ data = json.loads(response.read())
 
 eth_clp['market_name'] = 'Cryptomkt'
 eth_clp['currencies'] = 'ETH-CLP'
-eth_clp['last_price'] = int(round(float(data['ticker']['last_price'][0]),0))
-eth_clp['min_ask'] = int(round(float(data['ticker']['ask'][0]),0))
-eth_clp['max_bid']  = int(round(float(data['ticker']['bid'][0]),0))
+eth_clp['last_price'] = int(round(float(data['last_price'][0]),0))
+eth_clp['min_ask'] = int(round(float(data['ask'][0]),0))
+eth_clp['max_bid']  = int(round(float(data['bid'][0]),0))
 eth_clp['timestamp'] = str(datetime.datetime.now()).split('.')[0]
 
 with open(currencies_path + 'eth_clp_cryptomkt.json', 'w') as outfile:
