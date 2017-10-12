@@ -23,7 +23,7 @@ currencies_path = '/root/cryptobot/currencies/'
 def send_ethclp_stats():
              out = ""
              with open(currencies_path + 'eth_clp.json') as data_file:
-                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}    
+                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
                     data = json.load(data_file)
                     max_bid =  format_currency(data['max_bid'], 'CLP', locale='es_CL')
                     min_ask =  format_currency(data['min_ask'], 'CLP', locale='es_CL')
@@ -32,6 +32,16 @@ def send_ethclp_stats():
                     #data['min_ask'] = Money(data['max_bid'], 'CLP')
                     #data['last_price'] = Money(data['max_bid'], 'CLP')
                     out += '\n' + "SURBTC (ETH-CLP):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
+            with open(currencies_path + 'eth_clp_cryptomkt.json') as data_file:
+                   # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
+                   data = json.load(data_file)
+                   max_bid =  format_currency(data['max_bid'], 'CLP', locale='es_CL')
+                   min_ask =  format_currency(data['min_ask'], 'CLP', locale='es_CL')
+                   last_price =  format_currency(data['last_price'], 'CLP', locale='es_CL')
+                   last_update = data['last_update']
+                   #data['min_ask'] = Money(data['max_bid'], 'CLP')
+                   #data['last_price'] = Money(data['max_bid'], 'CLP')
+                   out += '\n' + "Crytomkt (ETH-CLP):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
              with open(currencies_path + 'bitstamp_eth_usd.json') as data_file:
                     data = json.load(data_file)
                     max_bid =  format_currency(data['max_bid'], 'USD', locale='en_US')
@@ -40,14 +50,14 @@ def send_ethclp_stats():
                     last_update = data['last_update']
 
                     out += '\n' + "Bitstamp (ETH-USD):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
-		    
+
 
              bot.sendMessage(group, out)
 
 def send_btcclp_stats():
              out = ""
              with open(currencies_path + 'btc_clp.json') as data_file:
-                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}    
+                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
                     data = json.load(data_file)
                     max_bid =  format_currency(data['max_bid'], 'CLP', locale='es_CL')
                     min_ask =  format_currency(data['min_ask'], 'CLP', locale='es_CL')
@@ -67,9 +77,11 @@ def send_btcclp_stats():
                     out += '\n' + "Bitstamp (BTC-USD):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
              bot.sendMessage(group, out)
 
-def forcerefresh():  
+def forcerefresh():
              os.system("python /root/cryptobot/update_scripts/surbtc.py")
              bot.sendMessage(group, "Valores SURBTC Actualizados")
+             os.system("python /root/cryptobot/update_scripts/cryptomkt.py")
+             bot.sendMessage(group, "Valores Crytomkt Actualizados")
              os.system("python /root/cryptobot/update_scripts/bitstamp.py")
              bot.sendMessage(group, "Valores Bitstamp Actualizados")
 
@@ -79,7 +91,7 @@ def forcerefresh():
 def arbitraje():
              out = "Oportunidades de Arbitraje: "
              usd_clp_rate = ""
-             with open(currencies_path + 'usd_clp.json') as data_file: 
+             with open(currencies_path + 'usd_clp.json') as data_file:
                    data = json.load(data_file)
                    usd_clp_rate = float(data['last_rate'])
              print usd_clp_rate
@@ -92,7 +104,7 @@ def arbitraje():
              bitstamp_btc_last_price = ""
 
              with open(currencies_path + 'btc_clp.json') as data_file:
-                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}    
+                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
                     data = json.load(data_file)
                     surbtc_btc_max_bid =  float(data['max_bid'])
                     surbtc_btc_min_ask =  float(data['min_ask'])
@@ -127,7 +139,7 @@ def arbitraje():
              bitstamp_eth_last_price = ""
 
              with open(currencies_path + 'eth_clp.json') as data_file:
-                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}    
+                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
                     data = json.load(data_file)
                     surbtc_eth_max_bid =  float(data['max_bid'])
                     surbtc_eth_min_ask =  float(data['min_ask'])
