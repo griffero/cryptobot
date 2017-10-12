@@ -88,7 +88,7 @@ def forcerefresh():
              send_ethclp_stats()
              send_btcclp_stats()
 
-def arbitraje():
+def arbitraje(btc=1, eth=1):
              out = "Oportunidades de Arbitraje: "
              usd_clp_rate = ""
              with open(currencies_path + 'usd_clp.json') as data_file:
@@ -119,15 +119,15 @@ def arbitraje():
                     bitstamp_btc_last_price =  float(data['last_price'])
              # Detectar diferencia de ultim precio
              if bitstamp_btc_last_price*usd_clp_rate > surbtc_btc_last_price:
-                    maxbtc = format_currency(int(bitstamp_btc_last_price*usd_clp_rate), 'CLP', locale='es_CL')
-                    minbtc = format_currency(int(surbtc_btc_last_price), 'CLP', locale='es_CL')
-                    margin = format_currency(int(bitstamp_btc_last_price*usd_clp_rate)-int(surbtc_btc_last_price), 'CLP', locale='es_CL')
-                    out +=  "\n" + "  - Al comprar 1 BTC en SurBTC a %s, podria venderse en BitStamp a %s y ganar %s" % (minbtc, maxbtc, margin)
+                    maxbtc = format_currency(int(bitstamp_btc_last_price*btc*usd_clp_rate), 'CLP', locale='es_CL')
+                    minbtc = format_currency(int(surbtc_btc_last_price*btc), 'CLP', locale='es_CL')
+                    margin = format_currency(int(bitstamp_btc_last_price*btc*usd_clp_rate)-int(surbtc_btc_last_price*btc), 'CLP', locale='es_CL')
+                    out +=  "\n" + "  - Al comprar %s BTC en SurBTC a %s, podria venderse en BitStamp a %s y ganar %s" % (btc, minbtc, maxbtc, margin)
              if bitstamp_btc_last_price*usd_clp_rate < surbtc_btc_last_price:
-                    maxbtc = format_currency(int(surbtc_btc_last_price), 'CLP', locale='es_CL')
-                    minbtc = format_currency(int(bitstamp_btc_last_price*usd_clp_rate), 'CLP', locale='es_CL')
-                    margin = format_currency(int(surbtc_btc_last_price-bitstamp_btc_last_price*usd_clp_rate), 'CLP', locale='es_CL')
-                    out += "\n" + "  - Al comprar 1BTC en Bitstamp a %s, podria venderse en SurBTC a %s y ganar %s" % (minbtc, maxbtc, margin)
+                    maxbtc = format_currency(int(surbtc_btc_last_price*btc), 'CLP', locale='es_CL')
+                    minbtc = format_currency(int(bitstamp_btc_last_price*btc*usd_clp_rate), 'CLP', locale='es_CL')
+                    margin = format_currency(int(surbtc_btc_last_price*btc-bitstamp_btc_last_price*btc*usd_clp_rate), 'CLP', locale='es_CL')
+                    out += "\n" + "  - Al comprar %s BTC en Bitstamp a %s, podria venderse en SurBTC a %s y ganar %s" % (btc, minbtc, maxbtc, margin)
 
 
              ### ETH
@@ -155,16 +155,16 @@ def arbitraje():
              # Detectar diferencia de ultim precio
              if bitstamp_eth_last_price*usd_clp_rate > surbtc_eth_last_price:
 #                    print "Existe una oportunidad de comprar eth barato en SurBTC y venderlo mas caro en Bitstamp"
-                    maxeth = format_currency(int(bitstamp_eth_last_price*usd_clp_rate), 'CLP', locale='es_CL')
-                    mineth = format_currency(int(surbtc_eth_last_price), 'CLP', locale='es_CL')
-                    margin = format_currency(int(bitstamp_eth_last_price*usd_clp_rate)-int(surbtc_eth_last_price), 'CLP', locale='es_CL')
-                    out += '\n' + "  - Al comprar 1 ETH en SurBTC a %s, podria venderse en BitStamp a %s y ganar %s" % (mineth, maxeth, margin)
+                    maxeth = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
+                    mineth = format_currency(int(surbtc_eth_last_price*eth), 'CLP', locale='es_CL')
+                    margin = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate)-int(surbtc_eth_last_price*eth), 'CLP', locale='es_CL')
+                    out += '\n' + "  - Al comprar %s ETH en SurBTC a %s, podria venderse en BitStamp a %s y ganar %s" % (eth, mineth, maxeth, margin)
              if bitstamp_eth_last_price*usd_clp_rate < surbtc_eth_last_price:
 #                    print "Existe una oportunidad de comprar eth barato en Bitstamp y venderlo mas caro en SurBTC"
-                    maxeth = format_currency(int(surbtc_eth_last_price), 'CLP', locale='es_CL')
-                    mineth = format_currency(int(bitstamp_eth_last_price*usd_clp_rate), 'CLP', locale='es_CL')
-                    margin = format_currency(int(surbtc_eth_last_price-bitstamp_eth_last_price*usd_clp_rate), 'CLP', locale='es_CL')
-                    out += '\n' + "  - Al comprar 1 ETH en Bitstamp a %s, podria venderse en SurBTC a %s y ganar %s" % (mineth, maxeth, margin)
+                    maxeth = format_currency(int(surbtc_eth_last_price*eth), 'CLP', locale='es_CL')
+                    mineth = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
+                    margin = format_currency(int(surbtc_eth_last_price*eth-bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
+                    out += '\n' + "  - Al comprar %s ETH en Bitstamp a %s, podria venderse en SurBTC a %s y ganar %s" % (eth, mineth, maxeth, margin)
              out += '\n\n' + "Tasa de cambio: 1 USD = %s CLP (Yahoo Finance)" % (usd_clp_rate)
              out += '\n' + 'WIP: Incluir costos de transacciones en calculo'
              #print out
@@ -186,8 +186,12 @@ def handle(msg):
          if "/forcerefresh" == msg["text"]:
              forcerefresh()
              return
-         if "/arbitraje" == msg["text"]:
-             arbitraje()
+         if "/arbitraje" in msg["text"]:
+             if "/arbitraje" == msg["text"]:
+                arbitraje()
+             if len(msg["text"].split(" ")) == 3:
+                cmd, btc, eth = msg["text"].split(" ")
+                arbitraje(float(btc), float(eth))
              return
          print msg["text"]
          print msg["date"]
