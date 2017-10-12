@@ -20,7 +20,7 @@ group = '-268121898'
 currencies_path = '/root/cryptobot/currencies/'
 
 
-def display_eth_info(currencies_name, out):
+def display_eth_info(currencies_name):
     with open(currencies_path + currencies_name) as data_file:
            # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
            data = json.load(data_file)
@@ -37,13 +37,13 @@ def display_eth_info(currencies_name, out):
            last_update = data['last_update']
            #data['min_ask'] = Money(data['max_bid'], 'CLP')
            #data['last_price'] = Money(data['max_bid'], 'CLP')
-           out += '\n' + "%s %s:\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (market_name, currencies, max_bid, min_ask, last_price, last_update)
+           return '\n' + "%s %s:\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (market_name, currencies, max_bid, min_ask, last_price, last_update)
 
 def send_ethclp_stats():
     out = ""
-    display_eth_info('eth_clp.json', out)
-    display_eth_info('eth_clp_cryptomkt.json', out)
-    display_eth_info('bitstamp_eth_usd.json', out)
+    out += display_eth_info('eth_clp.json')
+    out += display_eth_info('eth_clp_cryptomkt.json')
+    out += display_eth_info('bitstamp_eth_usd.json')
     bot.sendMessage(group, out)
 
 def send_btcclp_stats():
