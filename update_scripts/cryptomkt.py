@@ -18,7 +18,7 @@ eth_clp['currencies'] = 'ETH-CLP'
 eth_clp['last_price'] = int(round(float(data['data'][0]['last_price']),0))
 eth_clp['min_ask'] = int(round(float(data['data'][0]['ask']),0))
 eth_clp['max_bid']  = int(round(float(data['data'][0]['bid']),0))
-eth_clp['timestamp'] = str(datetime.datetime.now()).split('.')[0]
+eth_clp['last_update'] = str(datetime.datetime.now()).split('.')[0]
 
 with open(currencies_path + 'eth_clp_cryptomkt.json', 'w') as outfile:
     json.dump(eth_clp, outfile)
