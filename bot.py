@@ -169,14 +169,14 @@ def arbitraje(btc=1, eth=1):
                     mineth = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
                     margin = format_currency(int(cryptomkt_eth_last_price*eth-bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
                     out += '\n' + "  - Al comprar %s ETH en Bitstamp a %s, podria venderse en SurBTC a %s y ganar %s" % (eth, mineth, maxeth, margin)
-            if bitstamp_eth_last_price*usd_clp_rate > cryptomkt_eth_last_price:
+             if bitstamp_eth_last_price*usd_clp_rate > cryptomkt_eth_last_price:
             #                    print "Existe una oportunidad de comprar eth barato en SurBTC y venderlo mas caro en Bitstamp"
                    maxeth = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
-                   mineth = format_currency(int(surbtc_eth_last_price*eth), 'CLP', locale='es_CL')
+                   mineth = format_currency(int(cryptomkt_eth_last_price*eth), 'CLP', locale='es_CL')
                    margin = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate)-int(surbtc_eth_last_price*eth), 'CLP', locale='es_CL')
                    out += '\n' + "  - Al comprar %s ETH en Crytomkt a %s, podria venderse en BitStamp a %s y ganar %s" % (eth, mineth, maxeth, margin)
-            if bitstamp_eth_last_price*usd_clp_rate < cryptomkt_eth_last_price:
-            #                    print "Existe una oportunidad de comprar eth barato en Bitstamp y venderlo mas caro en SurBTC"
+             if bitstamp_eth_last_price*usd_clp_rate < cryptomkt_eth_last_price:
+            #                    print "Existe una oportunidad de comprar eth barato en Bitstamp y venderlo mas caro en Cryptomkt"
                    maxeth = format_currency(int(cryptomkt_eth_last_price*eth), 'CLP', locale='es_CL')
                    mineth = format_currency(int(bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
                    margin = format_currency(int(cryptomkt_eth_last_price*eth-bitstamp_eth_last_price*eth*usd_clp_rate), 'CLP', locale='es_CL')
