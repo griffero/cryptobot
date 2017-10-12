@@ -12,8 +12,6 @@ data = json.loads(response.read())
 
 btc_clp = {}
 
-eth_clp['market_name'] = 'SURBTC'
-eth_clp['currencies'] = 'ETH-CLP'
 btc_clp['last_price'] = int(round(float(data['ticker']['last_price'][0]),0))
 btc_clp['min_ask'] = int(round(float(data['ticker']['min_ask'][0]),0))
 btc_clp['max_bid']  = int(round(float(data['ticker']['max_bid'][0]),0))
@@ -38,6 +36,8 @@ eth_clp = {}
 response = urllib.urlopen(url_eth)
 data = json.loads(response.read())
 
+eth_clp['market_name'] = 'SURBTC'
+eth_clp['currencies'] = 'ETH-CLP'
 eth_clp['last_price'] = int(round(float(data['ticker']['last_price'][0]),0))
 eth_clp['min_ask'] = int(round(float(data['ticker']['min_ask'][0]),0))
 eth_clp['max_bid']  = int(round(float(data['ticker']['max_bid'][0]),0))

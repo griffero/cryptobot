@@ -12,8 +12,6 @@ data = json.loads(response.read())
 
 btc_usd = {}
 
-eth_clp['market_name'] = 'Bitstamp'
-eth_clp['currencies'] = 'ETH-USD'
 btc_usd['last_price'] = float(data['last'])
 btc_usd['min_ask'] = float(data['ask'])
 btc_usd['max_bid'] = float(data['bid'])
@@ -38,6 +36,8 @@ eth_usd = {}
 response = urllib.urlopen(url_eth)
 data = json.loads(response.read())
 
+eth_usd['market_name'] = 'Bitstamp'
+eth_usd['currencies'] = 'ETH-USD'
 eth_usd['last_price'] = float(data['last'])
 eth_usd['min_ask'] = float(data['ask'])
 eth_usd['max_bid'] = float(data['bid'])
