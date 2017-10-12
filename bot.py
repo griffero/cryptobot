@@ -20,39 +20,31 @@ group = '-268121898'
 currencies_path = '/root/cryptobot/currencies/'
 
 
+def display_eth_info(currencies_name, out):
+    with open(currencies_path + currencies_name) as data_file:
+           # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
+           data = json.load(data_file)
+           market_name = data['market_name']
+           currencies = data['currencies']
+           if currencies == "ETH-CLP":
+               max_bid =  format_currency(data['max_bid'], 'CLP', locale='es_CL')
+               min_ask =  format_currency(data['min_ask'], 'CLP', locale='es_CL')
+               last_price =  format_currency(data['last_price'], 'CLP', locale='es_CL')
+           else:
+               max_bid =  format_currency(data['max_bid'], 'USD', locale='en_US')
+               min_ask =  format_currency(data['min_ask'], 'USD', locale='en_US')
+               last_price =  format_currency(data['last_price'], 'USD', locale='en_US')
+           last_update = data['last_update']
+           #data['min_ask'] = Money(data['max_bid'], 'CLP')
+           #data['last_price'] = Money(data['max_bid'], 'CLP')
+           out += '\n' + "%s %s:\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (market_name, currencies, max_bid, min_ask, last_price, last_update)
+
 def send_ethclp_stats():
-             out = ""
-             with open(currencies_path + 'eth_clp.json') as data_file:
-                    # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
-                    data = json.load(data_file)
-                    max_bid =  format_currency(data['max_bid'], 'CLP', locale='es_CL')
-                    min_ask =  format_currency(data['min_ask'], 'CLP', locale='es_CL')
-                    last_price =  format_currency(data['last_price'], 'CLP', locale='es_CL')
-                    last_update = data['last_update']
-                    #data['min_ask'] = Money(data['max_bid'], 'CLP')
-                    #data['last_price'] = Money(data['max_bid'], 'CLP')
-                    out += '\n' + "SURBTC (ETH-CLP):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
-            with open(currencies_path + 'eth_clp_cryptomkt.json') as data_file:
-                   # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
-                   data = json.load(data_file)
-                   max_bid =  format_currency(data['max_bid'], 'CLP', locale='es_CL')
-                   min_ask =  format_currency(data['min_ask'], 'CLP', locale='es_CL')
-                   last_price =  format_currency(data['last_price'], 'CLP', locale='es_CL')
-                   last_update = data['last_update']
-                   #data['min_ask'] = Money(data['max_bid'], 'CLP')
-                   #data['last_price'] = Money(data['max_bid'], 'CLP')
-                   out += '\n' + "Crytomkt (ETH-CLP):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
-             with open(currencies_path + 'bitstamp_eth_usd.json') as data_file:
-                    data = json.load(data_file)
-                    max_bid =  format_currency(data['max_bid'], 'USD', locale='en_US')
-                    min_ask =  format_currency(data['min_ask'], 'USD', locale='en_US')
-                    last_price =  format_currency(data['last_price'], 'USD', locale='en_US')
-                    last_update = data['last_update']
-
-                    out += '\n' + "Bitstamp (ETH-USD):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
-
-
-             bot.sendMessage(group, out)
+    out = ""
+    display_eth_info('eth_clp.json', out)
+    display_eth_info('eth_clp_cryptomkt.json', out)
+    display_eth_info('bitstamp_eth_usd.json', out)
+    bot.sendMessage(group, out)
 
 def send_btcclp_stats():
              out = ""

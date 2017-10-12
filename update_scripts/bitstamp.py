@@ -12,6 +12,8 @@ data = json.loads(response.read())
 
 btc_usd = {}
 
+eth_clp['market_name'] = 'Bitstamp'
+eth_clp['currencies'] = 'ETH-USD'
 btc_usd['last_price'] = float(data['last'])
 btc_usd['min_ask'] = float(data['ask'])
 btc_usd['max_bid'] = float(data['bid'])
@@ -47,4 +49,3 @@ with open(currencies_path + 'bitstamp_eth_usd.json', 'w') as outfile:
     json.dump(eth_usd, outfile)
 
 print eth_usd
-
