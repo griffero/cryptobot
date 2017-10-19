@@ -106,6 +106,14 @@ def getmarkets():
 
    print markets
 
+def removealert(file):
+  print '/root/cryptobot/alerts/' + file + ".json"
+  if os.path.isfile('/root/cryptobot/alerts/' + file + ".json"):
+     os.system("rm /root/cryptobot/alerts/" + file + ".json")
+     bot.sendMessage(group, "Alerta %s borrada" % (file))
+  else:
+     bot.sendMessage(group, "La alerta %s no existe" % (file))
+
 def getalerts():
    alertfiles = []
    alerts = {}
@@ -259,8 +267,18 @@ def handle(msg):
          if "/forcerefresh" == msg["text"]:
              forcerefresh()
              return
+         if "/alerts" == msg["text"]:
+             mensaje = "Uso: \n- /alerts show\n- /alerts remove"
+             bot.sendMessage(group, mensaje)
          if "/alerts show" == msg["text"]:
              showalerts()
+             return
+         if "/alerts remove" in msg["text"]:
+             if len(msg["text"].split(" ")) == 3:
+                cmd, cmd2, file = msg["text"].split(" ")
+                removealert(file)
+             else:
+                bot.sendMessage(group, "Uso: /alerts remove <Nombre alerta sin .json>")
              return
          if "/arbitraje" in msg["text"]:
              if "/arbitraje" == msg["text"]:
