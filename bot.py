@@ -80,6 +80,61 @@ def forcerefresh():
              send_ethclp_stats()
              send_btcclp_stats()
 
+def getmarkets():
+   currencyfiles = []
+   markets = {}
+   for path, directories, files in os.walk(currencies_path):
+     print files
+     for file in files:
+        if ".json" in file:
+          currencyfiles.append(file)
+   print currencyfiles
+   for currencyfile in currencyfiles:
+       with open('/root/cryptobot/currencies/' + currencyfile) as data_file:
+          data = json.load(data_file)
+          if "currencies" in data:
+             currency = {}
+             currency[data['currencies']] = {}
+             currency[data['currencies']]['last_price'] = data['last_price'] 
+             currency[data['currencies']]['max_bid'] = data['max_bid'] 
+             currency[data['currencies']]['min_ask'] = data['min_ask'] 
+             if data['market_name'] not in markets:
+                markets[data['market_name']] = []
+                markets[data['market_name']].append(currency)
+             else:
+                markets[data['market_name']].append(currency) 
+
+   print markets
+
+def getalerts():
+   alertfiles = []
+   alerts = {}
+   for path, directories, files in os.walk('/root/cryptobot/alerts/'):
+     for file in files:
+        if ".json" in file:
+          alertfiles.append(file)
+   for alertfile in alertfiles:
+       with open('/root/cryptobot/alerts/' + alertfile) as data_file:
+          data = json.load(data_file)
+          alerts[alertfile] = {}
+          alerts[alertfile]['currency'] = data['currency']
+          alerts[alertfile]['limit']    = data['limit']
+          alerts[alertfile]['if']       = data['if']
+   return alerts
+
+def showalerts():
+   msg_out = ''
+   alertfiles = []
+   alerts = getalerts()
+   
+   msg_out += "Alertas configuradas\n\n"
+   for alert in alerts:
+     msg_out += "*" + alert + "*:\n"
+     msg_out += "  *Currency:* " + alerts[alert]['currency'] + "\n"
+     msg_out += "  *Limit:* " + alerts[alert]['limit'] + "\n"
+     msg_out += "  *If:* " + alerts[alert]['if'] + "\n"
+   bot.sendMessage(group, msg_out, parse_mode="markdown")
+
 def arbitraje(btc=1, eth=1):
              out = "Oportunidades de Arbitraje: "
              usd_clp_rate = ""
@@ -203,6 +258,9 @@ def handle(msg):
              return
          if "/forcerefresh" == msg["text"]:
              forcerefresh()
+             return
+         if "/alerts show" == msg["text"]:
+             showalerts()
              return
          if "/arbitraje" in msg["text"]:
              if "/arbitraje" == msg["text"]:

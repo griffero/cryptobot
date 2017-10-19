@@ -12,6 +12,8 @@ data = json.loads(response.read())
 
 btc_usd = {}
 
+btc_usd['market_name'] = 'Bitstamp'
+btc_usd['currencies'] = 'BTC-USD'
 btc_usd['last_price'] = float(data['last'])
 btc_usd['min_ask'] = float(data['ask'])
 btc_usd['max_bid'] = float(data['bid'])

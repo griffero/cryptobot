@@ -1,0 +1,5 @@
+{
+  "currency": "ETH-USD",
+  "limit": "303.0",
+  "if": "lower"
+}

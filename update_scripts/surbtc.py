@@ -12,6 +12,8 @@ data = json.loads(response.read())
 
 btc_clp = {}
 
+btc_clp['market_name'] = 'SurBTC'
+btc_clp['currencies'] = 'BTC-CLP'
 btc_clp['last_price'] = int(round(float(data['ticker']['last_price'][0]),0))
 btc_clp['min_ask'] = int(round(float(data['ticker']['min_ask'][0]),0))
 btc_clp['max_bid']  = int(round(float(data['ticker']['max_bid'][0]),0))
