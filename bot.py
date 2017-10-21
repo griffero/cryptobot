@@ -58,6 +58,7 @@ def send_ethclp_stats():
     out += display_eth_info('eth_clp.json')
     out += display_eth_info('eth_clp_cryptomkt.json')
     out += display_eth_info('bitstamp_eth_usd.json')
+    out += display_eth_info('bitfinex_eth_usd.json')
     bot.sendMessage(group, out)
 
 def send_btcclp_stats():
@@ -81,6 +82,15 @@ def send_btcclp_stats():
                     last_update = data['last_update']
 
                     out += '\n' + "Bitstamp (BTC-USD):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
+
+             with open(currencies_path + 'bitfinex_btc_usd.json') as data_file:
+                    data = json.load(data_file)
+                    max_bid =  format_currency(data['max_bid'], 'USD', locale='en_US')
+                    min_ask =  format_currency(data['min_ask'], 'USD', locale='en_US')
+                    last_price =  format_currency(data['last_price'], 'USD', locale='en_US')
+                    last_update = data['last_update']
+
+                    out += '\n' + "Bitfinex (BTC-USD):\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (max_bid, min_ask, last_price, last_update)
              bot.sendMessage(group, out)
 
 def forcerefresh():
@@ -90,6 +100,8 @@ def forcerefresh():
              bot.sendMessage(group, "Valores Crytomkt Actualizados")
              os.system("python /root/cryptobot/update_scripts/bitstamp.py")
              bot.sendMessage(group, "Valores Bitstamp Actualizados")
+             os.system("python /root/cryptobot/update_scripts/bitfinex.py")
+             bot.sendMessage(group, "Valores Bitfinex Actualizados")
 
              send_ethclp_stats()
              send_btcclp_stats()
