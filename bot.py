@@ -21,12 +21,26 @@ currencies_path = '/root/cryptobot/currencies/'
 
 
 def display_eth_info(currencies_name):
+    usd_clp_rate = ""
+    with open(currencies_path + 'usd_clp.json') as data_file:
+           data = json.load(data_file)
+           usd_clp_rate = float(data['last_rate'])
+
     with open(currencies_path + currencies_name) as data_file:
            # contenido: {u'max_bid': 3057494, u'last_price': 3104998, u'min_ask': 3104997, u'last_update': u'2017-10-09 23:12:55'}
            data = json.load(data_file)
            market_name = data['market_name']
            currencies = data['currencies']
+           out_convert_maxbid = ""
+           out_convert_minask = ""
+           out_convert_lastprice = ""
            if currencies == "ETH-CLP":
+               max_bid_usd = round(data['max_bid']/usd_clp_rate, 2)
+               min_ask_usd = round(data['min_ask']/usd_clp_rate, 2)
+               last_price_usd = round(data['last_price']/usd_clp_rate, 2)
+               out_convert_maxbid = "(USD$%s)" % (str(max_bid_usd))
+               out_convert_minask = "(USD$%s)" % (str(min_ask_usd))
+               out_convert_lastprice = "(USD$%s)" % (str(last_price_usd))
                max_bid =  format_currency(data['max_bid'], 'CLP', locale='es_CL')
                min_ask =  format_currency(data['min_ask'], 'CLP', locale='es_CL')
                last_price =  format_currency(data['last_price'], 'CLP', locale='es_CL')
@@ -37,7 +51,7 @@ def display_eth_info(currencies_name):
            last_update = data['last_update']
            #data['min_ask'] = Money(data['max_bid'], 'CLP')
            #data['last_price'] = Money(data['max_bid'], 'CLP')
-           return '\n' + "%s %s:\n  - max bid: %s\n  - min ask: %s\n  - last price: %s\n  - Last Update: %s" % (market_name, currencies, max_bid, min_ask, last_price, last_update)
+           return '\n' + "%s %s:\n  - max bid: %s %s\n  - min ask: %s %s\n  - last price: %s %s\n  - Last Update: %s" % (market_name, currencies, max_bid, out_convert_maxbid, min_ask, out_convert_minask, last_price, out_convert_lastprice, last_update)
 
 def send_ethclp_stats():
     out = ""

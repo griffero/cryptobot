@@ -1,14 +1,18 @@
-import urllib, json, datetime
+import urllib2, json, datetime
 
 url_btc = "https://www.surbtc.com/api/v2/markets/btc-clp/ticker.json"
 url_eth = "https://www.surbtc.com/api/v2/markets/eth-clp/ticker.json"
+
+headers = { 'User-Agent': 'curl/7.38.0' }
 
 currencies_path = "/root/cryptobot/currencies/"
 
 # Datos BTC-CLP
 # Output: {u'ticker': {u'max_bid': [u'3075000.0', u'CLP'], u'last_price': [u'3075000.0', u'CLP'], u'min_ask': [u'3110000.0', u'CLP'], u'volume': [u'19.47938755', u'BTC'], u'price_variation_7d': u'0.075', u'price_variation_24h': u'0.049'}}
-response = urllib.urlopen(url_btc)
+req = urllib2.Request(url_btc, None, headers)
+response = urllib2.urlopen(req, timeout=3.0)
 data = json.loads(response.read())
+print data
 
 btc_clp = {}
 
@@ -35,7 +39,9 @@ print btc_clp
 
 eth_clp = {}
 
-response = urllib.urlopen(url_eth)
+req = urllib2.Request(url_eth, None, headers)
+
+response = urllib2.urlopen(req, timeout=2.5)
 data = json.loads(response.read())
 
 eth_clp['market_name'] = 'SURBTC'

@@ -1,4 +1,4 @@
-import urllib, json, datetime
+import urllib2, json, datetime
 
 url_btc = "https://www.bitstamp.net/api/v2/ticker/btcusd/"
 url_eth = "https://www.bitstamp.net/api/v2/ticker/ethusd/"
@@ -7,7 +7,7 @@ currencies_path = "/root/cryptobot/currencies/"
 
 # Datos BTC-CLP
 # Output: {"high": "4865.00", "last": "4805.04", "timestamp": "1507604582", "bid": "4800.17", "vwap": "4691.78", "volume": "13243.35500195", "low": "4541.00", "ask": "4805.03", "open": "4761.67"}
-response = urllib.urlopen(url_btc)
+response = urllib2.urlopen(url_btc, timeout=2.5)
 data = json.loads(response.read())
 
 btc_usd = {}
@@ -35,7 +35,7 @@ print btc_usd
 
 eth_usd = {}
 
-response = urllib.urlopen(url_eth)
+response = urllib2.urlopen(url_eth, timeout=2.5)
 data = json.loads(response.read())
 
 eth_usd['market_name'] = 'Bitstamp'

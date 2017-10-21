@@ -1,4 +1,4 @@
-import urllib, json, datetime
+import urllib2, json, datetime
 
 url_eth = "https://api.cryptomkt.com/v1/ticker?market=ETHCLP"
 
@@ -9,7 +9,7 @@ currencies_path = "/root/cryptobot/currencies/"
 
 eth_clp = {}
 
-response = urllib.urlopen(url_eth)
+response = urllib2.urlopen(url_eth, timeout=5.0)
 data = json.loads(response.read())
 
 
