@@ -14,6 +14,16 @@ while True:
              except:
                pass
              try:
+               os.system("python /root/cryptobot/update_scripts/bitfinex.py")
+               print "Valores Bitfinex Actualizados"
+             except:
+               pass
+             try:
+               os.system("python /root/cryptobot/update_scripts/gdax.py")
+               print "Valores GDAX Actualizados"
+             except:
+               pass
+             try:
                os.system("python /root/cryptobot/update_scripts/cryptomkt.py")
                print "Valores Cryptomkt Actualizados"
              except:
