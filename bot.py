@@ -237,6 +237,30 @@ def removealert(file):
   else:
      bot.sendMessage(group, "La alerta %s no existe" % (file))
 
+
+"""
+{
+  "currency": "BTC-USD",
+  "limit": "5650.0",
+  "if": "lower"
+}
+"""
+def addalert(exchange, condition, limit):
+  selected = 0
+  while True:
+   if os.path.isfile('/root/cryptobot/alerts/' + str(selected) + '.json'):
+     selected += 1
+     continue
+   break
+  filename = str(selected)+'.json'
+  opts = {}
+  opts["currency"] = exchange
+  opts["limit"] = float(limit)
+  opts["if"] = condition
+  with open('/root/cryptobot/alerts/' + filename, 'w') as outfile:
+    json.dump(opts, outfile, indent=3)
+  
+
 def getalerts():
    alertfiles = []
    alerts = {}
@@ -262,7 +286,7 @@ def showalerts():
    for alert in alerts:
      msg_out += "*" + alert + "*:\n"
      msg_out += "  *Currency:* " + alerts[alert]['currency'] + "\n"
-     msg_out += "  *Limit:* " + alerts[alert]['limit'] + "\n"
+     msg_out += "  *Limit:* " + str(float(alerts[alert]['limit'])) + "\n"
      msg_out += "  *If:* " + alerts[alert]['if'] + "\n"
    bot.sendMessage(group, msg_out, parse_mode="markdown")
 
@@ -296,7 +320,7 @@ def arbitraje(btc=1, eth=1):
                     bitstamp_btc_min_ask =  float(data['min_ask'])
                     bitstamp_btc_last_price =  float(data['last_price'])
              # Detectar diferencia de ultim precio
-             if bitstamp_btc_last_price*usd_clp_rate > surbtc_btc_last_price:
+             if bitstamp_btc_last_price*usd_clp_rate > surbtc_btc_min_ask:
                     maxbtc = format_currency(int(bitstamp_btc_last_price*btc*usd_clp_rate), 'CLP', locale='es_CL')
                     minbtc = format_currency(int(surbtc_btc_last_price*btc), 'CLP', locale='es_CL')
                     margin = format_currency(int(bitstamp_btc_last_price*btc*usd_clp_rate)-int(surbtc_btc_last_price*btc), 'CLP', locale='es_CL')
@@ -369,6 +393,22 @@ def arbitraje(btc=1, eth=1):
                    out += '\n' + "  - Al comprar %s ETH en Bitstamp a %s, podria venderse en Crytomkt a %s y ganar %s" % (eth, mineth, maxeth, margin)
 
 
+             # Arbitraje BCI
+             monto_original = 1000000
+             monto_usd = monto_original/usd_clp_rate
+             costo_transferencia = 55
+             #
+             comision_bitstamp = (monto_usd - costo_transferencia)*0.0005
+             if comision_bitstamp < 7.5:
+               comision_bitstamp = 7.5
+             monto_efectivo = monto_usd - costo_transferencia - comision_bitstamp
+             cantidad_eth_a_comprar = round((monto_efectivo*0.9965/bitstamp_eth_last_price), 6)
+             liquidacion_surbtc = (cantidad_eth_a_comprar)*0.9945*surbtc_eth_max_bid
+             out += "\n\nCon un presupuesto de $1.000.000, se puede transferir por BCI a bitstamp, logrando comprar ETH%s para luego liquidar en surBTC a %s" % (str(cantidad_eth_a_comprar), format_currency(liquidacion_surbtc, 'CLP', locale='es_CL')) 
+             out += "\n- Costo BCI: %s" % (str(costo_transferencia))
+             out += "\n- Costo Deposito Bitstamp: USD$%s" % (str(comision_bitstamp))
+             out += "\n- Costo Orden de Compra Bitstamp: USD$%s" % (str(monto_efectivo*0.0035))
+             out += "\n- Costo Orden de Venta SurBTC: ETH%s" % (str(cantidad_eth_a_comprar*0.0055))
              out += '\n\n' + "Tasa de cambio: 1 USD = %s CLP (Yahoo Finance)" % (usd_clp_rate)
              out += '\n' + 'WIP: Incluir costos de transacciones en calculo'
              #print out
@@ -408,6 +448,22 @@ def handle(msg):
                 removealert(file)
              else:
                 bot.sendMessage(group, "Uso: /alerts remove <Nombre alerta sin .json>")
+             return
+         if "/alerts add" in msg["text"]:
+             if len(msg["text"].split(" ")) == 5:
+                arg0, arg1, exchange, condition, limit = msg["text"].split(" ")
+                condition = condition.lower()
+                if condition not in ["upper", "lower"]:
+                   bot.sendMessage(group, "Uso: /alerts add <BTC-USD> <upper|lower> <limit>")
+                   return
+                try:
+                   limit = float(limit)
+                except:
+                   bot.sendMessage(group, "Uso: /alerts add <BTC-USD> <upper|lower> <limit>")
+                   return
+                addalert(exchange, condition, limit) 
+             else:
+                bot.sendMessage(group, "Uso: /alerts add <BTC-USD> <upper|lower> <limit>")
              return
          if "/arbitraje" in msg["text"]:
              if "/arbitraje" == msg["text"]:
